@@ -1,18 +1,54 @@
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
+import jwt, { Secret, SignOptions } from 'jsonwebtoken';
+import { StringValue } from 'ms';
 
 export const comparePassword = async (plain: string, hashed: string) =>
   await bcrypt.compare(plain, hashed);
 
-export const generateAccessToken = (payload: object): string =>
-  jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET!, {
-    expiresIn: process.env.ACCESS_TOKEN_EXPIRES_IN || '15m',
-  });
+// ======================
+// Generate Access Token
+// ======================
+export const generateAccessToken = (payload: Record<string, any>): string => {
+  const secret = process.env.ACCESS_TOKEN_SECRET as Secret;
+  if (!secret) {
+    throw new Error('ACCESS_TOKEN_SECRET is not defined');
+  }
 
-export const generateRefreshToken = (payload: object): string =>
-  jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET!, {
-    expiresIn: process.env.REFRESH_TOKEN_EXPIRES_IN || '7d',
-  });
+  const options: SignOptions = {
+    expiresIn: (process.env.ACCESS_TOKEN_EXPIRES_IN as StringValue) || '15m',
+  };
 
-export const verifyRefreshToken = (token: string) =>
-  jwt.verify(token, process.env.JWT_REFRESH_SECRET || 'refresh-secret');
+  return jwt.sign(payload, secret, options);
+};
+
+// ======================
+// Generate Refresh Token
+// ======================
+export const generateRefreshToken = (payload: Record<string, any>): string => {
+  const secret = process.env.REFRESH_TOKEN_SECRET as Secret;
+  if (!secret) {
+    throw new Error('REFRESH_TOKEN_SECRET is not defined');
+  }
+
+  const options: SignOptions = {
+    expiresIn: process.env.REFRESH_TOKEN_EXPIRES_IN as StringValue || '7d',
+  };
+
+  return jwt.sign(payload, secret, options);
+};
+
+// ======================
+// Verify Refresh Token
+// ======================
+export const verifyRefreshToken = (token: string): any => {
+  const secret = process.env.REFRESH_TOKEN_SECRET as Secret;
+  if (!secret) {
+    throw new Error('REFRESH_TOKEN_SECRET is not defined');
+  }
+
+  try {
+    return jwt.verify(token, secret);
+  } catch (err) {
+    throw new Error('Invalid refresh token');
+  }
+};
