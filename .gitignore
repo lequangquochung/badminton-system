@@ -1,0 +1,39 @@
+# Directory containing npm packages
+node_modules/
+# Environment files (contain sensitive information)
+.env
+.env.local
+.env.*.local
+
+# System log and debug files
+npm-debug.log*
+*.log
+
+# Build/compiled directories
+dist/
+build/
+out/
+.temp/
+.cache/
+
+# Test coverage reports
+coverage/
+
+# IDE/editor configuration
+.vscode/
+.idea/
+
+# Unwanted system files
+.DS_Store
+Thumbs.db
+
+# Temporary & backup files
+*.swp
+*.tmp
+*.bak
+
+# Git metadata (in special cases)
+.git/
+
+# Lock file if not needed to commit
+package-lock.json
