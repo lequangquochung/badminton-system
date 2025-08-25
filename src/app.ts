@@ -10,7 +10,7 @@ const app = express();
 
 // config cors
 const corsOptions = {
-    origin: '*', // Allow all origins
+    origin: "*", // Allow all origins
     optionsSuccessStatus: 200, // For legacy browser support,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"]
