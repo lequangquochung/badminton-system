@@ -1,18 +1,19 @@
-import cors from 'cors';
 import express from 'express';
 import { errorHandler } from './middlewares/errorHandler';
 import authRouter from './routers/authRoutes';
 import matchesRoutes from './routers/matchesRoutes';
+import playerController from './controllers/players.controller';
 import playersRoutes from './routers/player.Routes';
+import cors from 'cors';
 
 const app = express();
 
 // config cors
 const corsOptions = {
-    origin: "*", // Allow all origins
+    origin: '*', // Allow all origins
     optionsSuccessStatus: 200, // For legacy browser support,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
+    allowedHeaders: ["Content-Type", "Authorization"]
 };
 
 app.use(cors(corsOptions));
@@ -22,6 +23,7 @@ app.use(express.json());
 app.use(express.urlencoded({
     extended: true
 }))
+// app.use('/api/products', productRouter);
 // matches routes
 app.use('/api/matches', matchesRoutes);
 // players routes
