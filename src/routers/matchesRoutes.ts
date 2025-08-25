@@ -8,9 +8,9 @@ const matchesRoutes = express.Router();
 matchesRoutes.post('/', MatchesController.createMatch);
 
 // get history matches
-matchesRoutes.get('/history', MatchesController.getHistoryMatches);
+matchesRoutes.post('/history', MatchesController.getHistoryMatches);
 
 // get pair win rate
-matchesRoutes.get('/pair-win-rate', MatchesController.getPairWinRate);
+matchesRoutes.post('/pair-win-rate', MatchesController.getPairWinRate);
 
 export default matchesRoutes;
