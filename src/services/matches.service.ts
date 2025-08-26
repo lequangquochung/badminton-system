@@ -53,6 +53,12 @@ class MatchesService {
                         totalCount: [{ $count: 'count' }],
                     },
                 },
+                {
+                    $project: {
+                        data: 1,
+                        totalCount: { $ifNull: [{ $arrayElemAt: ['$totalCount.count', 0] }, 0] }
+                    }
+                }
             ];
 
             return await MatchesRepository.getHistoryMatches(pipeline);
