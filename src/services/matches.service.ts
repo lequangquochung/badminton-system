@@ -35,7 +35,7 @@ class MatchesService {
                 totalCount: number;
                 page: number;
                 totalPage: number;
-            }[]
+            }
         > {
         try {
             const matchCase: any = {};
@@ -60,8 +60,9 @@ class MatchesService {
                     }
                 }
             ];
-
-            return await MatchesRepository.getHistoryMatches(pipeline);
+            const result = await MatchesRepository.getHistoryMatches(pipeline);
+            
+            return result[0];
         } catch (error: any) {
             throw new Error('Error: ' + error.message);
         }
