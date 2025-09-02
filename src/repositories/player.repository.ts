@@ -97,11 +97,7 @@ class PlayersRepository {
     }
 
     private async getWinRate(playerId: string): Promise<number> {
-        console.log("player", playerId);
-
         const playerInfo = await playerService.getPlayerById(playerId);
-        console.log("123", playerInfo);
-
         if (playerInfo) {
             const winRate = playerInfo?.matchesWon / playerInfo.matchesPlayed * 100;
             console.log("winRate", winRate);

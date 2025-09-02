@@ -26,7 +26,7 @@ class PlayerService {
                 totalCount: number;
                 page: number;
                 totalPage: number;
-            }[]
+            }
         > {
         try {
             const matchCase: any = {};
@@ -45,8 +45,8 @@ class PlayerService {
                     },
                 },
             ];
-
-            return await playersRepository.getAll(pipeline);
+            const result = await playersRepository.getAll(pipeline);
+            return result[0];
         } catch (error: any) {
             throw new Error('Error: ' + error.message);
         }

@@ -8,5 +8,5 @@ const PORT = ENV.SERVER_PORT;
 connectDatabase();
 
 app.listen(PORT, () => {
-  log('server is running');
+  log('server is running', PORT);
 });
