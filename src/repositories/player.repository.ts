@@ -100,8 +100,6 @@ class PlayersRepository {
         const playerInfo = await playerService.getPlayerById(playerId);
         if (playerInfo) {
             const winRate = playerInfo?.matchesWon / playerInfo.matchesPlayed * 100;
-            console.log("winRate", winRate);
-
             return parseFloat(winRate.toFixed(2)) || 0;
         }
         return 0;
