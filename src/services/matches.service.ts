@@ -1,5 +1,5 @@
 import { PipelineStage } from 'mongoose';
-import { IMatch, IPairMatch } from '../models/matches.mode';
+import MatchModel, { IMatch, IPairMatch } from '../models/matches.mode';
 import { IPlayer } from '../models/player.model';
 import MatchesRepository from '../repositories/matches.repository';
 import PlayersRepository from '../repositories/player.repository';
@@ -27,44 +27,15 @@ class MatchesService {
      * get history matches
      */
     async getHistoryMatches(
-        search: any | undefined,
-        page: string,
-        limit: string): Promise<
-            {
-                data: IMatch[];
-                totalCount: number;
-                page: number;
-                totalPage: number;
-            }
-        > {
+        search: string,
+        page: number,
+        limit: number
+    ) {
         try {
-            const matchCase: any = {};
-            // TODO Search 
-            // if (search) {
-            //     matchCase.name = { $regex: search, $options: 'i' };
-            // }
-            const skip = (Number(page) - 1) * Number(limit);
-
-            const pipeline: PipelineStage[] = [
-                { $match: matchCase },
-                {
-                    $facet: {
-                        data: [{ $skip: skip }, { $limit: parseInt(limit) }],
-                        totalCount: [{ $count: 'count' }],
-                    },
-                },
-                {
-                    $project: {
-                        data: 1,
-                        totalCount: { $ifNull: [{ $arrayElemAt: ['$totalCount.count', 0] }, 0] }
-                    }
-                }
-            ];
-            const result = await MatchesRepository.getHistoryMatches(pipeline);
-            
-            return result[0];
+            const result = await MatchesRepository.getHistoryMatches(search, page, limit);
+            return result;
         } catch (error: any) {
-            throw new Error('Error: ' + error.message);
+            throw new Error("Error getHistoryMatches: " + error.message);
         }
     }
 

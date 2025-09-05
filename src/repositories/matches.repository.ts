@@ -8,13 +8,63 @@ class MatchesRepository {
         return await match.save();
     }
 
-    async getHistoryMatches(pipeline: PipelineStage[]): Promise<{
+    async getHistoryMatches(
+        search: string,
+        page: number,
+        limit: number
+    ): Promise<{
         data: IMatch[];
         totalCount: number;
         page: number;
         totalPage: number;
-    }[]> {
-        return await MatchModel.aggregate(pipeline);
+    }> {
+        const matchCase: any = {};
+
+        if (search) {
+            matchCase.$or = [
+                { firstPlayer: { $regex: search, $options: "i" } },
+                { secPlayer: { $regex: search, $options: "i" } },
+                { thirdPlayer: { $regex: search, $options: "i" } },
+                { fourthPlayer: { $regex: search, $options: "i" } },
+            ];
+        }
+
+        const pageNum = Number(page) || 1;
+        const limitNum = Number(limit) || 10;
+        const skip = (pageNum - 1) * limitNum;
+
+        // Pipeline
+        const pipeline: PipelineStage[] = [
+            { $match: matchCase },
+            { $sort: { matchDay: -1 } },
+            {
+                $facet: {
+                    data: [
+                        { $skip: skip },
+                        { $limit: limitNum }
+                    ],
+                    totalCount: [
+                        { $count: "count" }
+                    ]
+                }
+            },
+            {
+                $project: {
+                    data: 1,
+                    totalCount: { $ifNull: [{ $arrayElemAt: ["$totalCount.count", 0] }, 0] }
+                }
+            }
+        ];
+
+        const result = await MatchModel.aggregate(pipeline);
+        const { data, totalCount } = result[0];
+
+        return {
+            data,
+            totalCount,
+            page: pageNum,
+            totalPage: Math.ceil(totalCount / limitNum),
+        };
     }
 
     async getPairWinRate(firstPlayer: string, secPlayer: string): Promise<IPairMatch> {

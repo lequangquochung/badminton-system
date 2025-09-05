@@ -56,15 +56,9 @@ class MatchesController {
      */
     async getHistoryMatches(req: Request, res: Response, next: NextFunction) {
         try {
-            const {
-                search,
-                page = '1',
-                limit = '10',
-            } = req.query as {
-                search?: string;
-                page?: string;
-                limit?: string;
-            };
+            const search = req.body?.search || "";
+            const page = req.body?.page || 1;
+            const limit = req.body.limit || 10;
 
             const result = await matchesService.getHistoryMatches(search, page, limit);
             sendSuccess(res, HttpStatusCode.OK, result);
