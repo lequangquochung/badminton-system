@@ -75,15 +75,15 @@ class PlayersRepository {
      * @param id - Player ID
      * @param data - Partial player data to update
      */
-    async updateDataPlayer(id: string, score: number): Promise<IPlayer | null> {
+    async updateDataPlayer(id: string, score: number, isWinner: boolean): Promise<IPlayer | null> {
         await PlayerModel.findByIdAndUpdate(
             id,
             {
                 $inc: {
                     score: score,
                     matchesPlayed: 1,
-                    matchesWon: score === 21 ? 1 : 0,
-                    matchesLost: score !== 21 ? 1 : 0,
+                    matchesWon: isWinner ? 1 : 0,
+                    matchesLost: !isWinner ? 1 : 0,
                 }
             },
             { new: true });
@@ -104,6 +104,8 @@ class PlayersRepository {
         }
         return 0;
     }
+
+
 
 
 }

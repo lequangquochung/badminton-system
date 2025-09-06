@@ -40,7 +40,23 @@ class MatchesController {
                 }
                 // checkTeamSide
                 const teamSide = matchesService.checkTeamSide(index);
-                await playerService.updateDataPlayer(playerObj?.id, teamSide ? req.body.secScore : req.body.firstScore);
+                console.log("teamSide", req.body);
+                const firstScore = req.body.firstScore;
+                const secScore = req.body.secScore;
+                let isWinner = false;
+                if (teamSide) {
+                    if (secScore < firstScore || firstScore === 21) {
+                        isWinner = true;
+                    } else {
+                        if (firstScore > secScore) {
+                            isWinner = true;
+                        }
+                    }
+                } else {
+                    
+                }
+
+                await playerService.updateDataPlayer(playerObj?.id, teamSide ? req.body.secScore : req.body.firstScore, isWinner);
             }
 
             // sendSuccess
@@ -81,6 +97,12 @@ class MatchesController {
         } catch (error) {
             next(error);
         }
+    }
+
+    isWinner(checkScore: number, secScore: number) {
+        console.log("isWinner");
+
+
     }
 }
 

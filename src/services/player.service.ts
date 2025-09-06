@@ -78,9 +78,9 @@ class PlayerService {
     /**
      * update player data
      */
-    async updateDataPlayer(id: string, score: number) {
+    async updateDataPlayer(id: string, score: number, isWinner: boolean) {
         try {
-            await playersRepository.updateDataPlayer(id, score);
+            await playersRepository.updateDataPlayer(id, score, isWinner);
         } catch (error: any) {
             throw new Error('Error: ' + error.message);
         }
