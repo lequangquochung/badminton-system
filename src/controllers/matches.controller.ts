@@ -1,10 +1,11 @@
 import { NextFunction, Request, Response } from "express";
+import { ETEAM } from "../enum/eteam";
 import { IMatch } from "../models/matches.mode";
 import matchesService from "../services/matches.service";
 import playerService from "../services/player.service";
 import { HttpStatusCode } from "../utils/httpStatusCode.util";
-import { sendSuccess } from "../utils/response.util";
 import { MessageResponse } from "../utils/message.ultils";
+import { sendSuccess } from "../utils/response.util";
 
 class MatchesController {
     /**
@@ -40,23 +41,21 @@ class MatchesController {
                 }
                 // checkTeamSide
                 const teamSide = matchesService.checkTeamSide(index);
-                console.log("teamSide", req.body);
                 const firstScore = req.body.firstScore;
                 const secScore = req.body.secScore;
+                let winnerTeam = matchesService.getWinner(firstScore, secScore);
                 let isWinner = false;
-                if (teamSide) {
-                    if (secScore < firstScore || firstScore === 21) {
+                if (teamSide === 0 || teamSide === 1) {
+                    if (winnerTeam === ETEAM.FIRST_TEAM) {
                         isWinner = true;
-                    } else {
-                        if (firstScore > secScore) {
-                            isWinner = true;
-                        }
                     }
                 } else {
-                    
+                    if (winnerTeam === ETEAM.SEC_TEAM) {
+                        isWinner = true;
+                    }
                 }
 
-                await playerService.updateDataPlayer(playerObj?.id, teamSide ? req.body.secScore : req.body.firstScore, isWinner);
+                await playerService.updateDataPlayer(playerObj?.id, teamSide === 2 || teamSide === 3 ? req.body.secScore : req.body.firstScore, isWinner);
             }
 
             // sendSuccess
@@ -99,11 +98,7 @@ class MatchesController {
         }
     }
 
-    isWinner(checkScore: number, secScore: number) {
-        console.log("isWinner");
-
-
-    }
+    
 }
 
 
