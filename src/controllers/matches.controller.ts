@@ -45,7 +45,7 @@ class MatchesController {
                 const secScore = req.body.secScore;
                 let winnerTeam = matchesService.getWinner(firstScore, secScore);
                 let isWinner = false;
-                if (teamSide) {
+                if (!teamSide) {
                     if (winnerTeam === ETEAM.FIRST_TEAM) {
                         isWinner = true;
                     }
@@ -54,8 +54,6 @@ class MatchesController {
                         isWinner = true;
                     }
                 }
-                console.log(teamSide, player.id);
-
                 await playerService.updateDataPlayer(playerObj?.id, teamSide ? req.body.secScore : req.body.firstScore, isWinner);
             }
 

@@ -63,7 +63,7 @@ class MatchesService {
         if (secScore === 30) return ETEAM.SEC_TEAM;
 
         if (firstScore >= 21 || secScore >= 21) {
-            if (Math.abs(firstScore - secScore) >= 2) {
+            if (Math.abs(firstScore - secScore) === 2) {
                 return firstScore > secScore ? ETEAM.FIRST_TEAM : ETEAM.SEC_TEAM;
             }
         }
