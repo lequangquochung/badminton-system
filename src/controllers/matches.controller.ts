@@ -86,11 +86,10 @@ class MatchesController {
      */
     async getPairWinRate(req: Request, res: Response, next: NextFunction) {
         try {
-            const { firstPlayer, secPlayer } = req.body as {
-                firstPlayer: string;
-                secPlayer: string;
-            };
-            const result = await matchesService.getPairWinRate(firstPlayer, secPlayer);
+            const firstPair = req.body?.firstTeam ?? "";
+            const secondPair = req.body?.secTeam ?? "";
+
+            const result = await matchesService.getPairWinRate(firstPair, secondPair);
             sendSuccess(res, HttpStatusCode.OK, { historyByTeam: result });
         } catch (error) {
             next(error);

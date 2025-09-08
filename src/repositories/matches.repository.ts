@@ -67,30 +67,54 @@ class MatchesRepository {
         };
     }
 
-    async getPairWinRate(firstPlayer: string, secPlayer: string): Promise<IPairMatch> {
+    async getPairWinRate(firstPair: [string, string], secondPair: [string, string]): Promise<IPairMatch> {
         const matches = await MatchModel.find({
             $or: [
-                { $and: [{ firstPlayer: firstPlayer }, { secPlayer: secPlayer }] },
-                { $and: [{ firstPlayer: secPlayer }, { secPlayer: firstPlayer }] },
-                { $and: [{ thirdPlayer: firstPlayer }, { fourthPlayer: secPlayer }] },
-                { $and: [{ thirdPlayer: secPlayer }, { fourthPlayer: firstPlayer }] },
-            ]
+                {
+                    $and: [
+                        { firstPlayer: { $in: firstPair } },
+                        { secPlayer: { $in: firstPair } },
+                        { thirdPlayer: { $in: secondPair } },
+                        { fourthPlayer: { $in: secondPair } },
+                    ],
+                },
+                {
+                    $and: [
+                        { firstPlayer: { $in: secondPair } },
+                        { secPlayer: { $in: secondPair } },
+                        { thirdPlayer: { $in: firstPair } },
+                        { fourthPlayer: { $in: firstPair } },
+                    ],
+                },
+            ],
+        });
+        
+        let firstPairWins = 0;
+        let secondPairWins = 0;
+
+        matches.forEach(match => {
+            const winner: string[] = match.winner; // giả sử winner là array chứa tên 2 người thắng
+
+            const isFirstPairWinner = firstPair.every(p => winner.includes(p));
+            if (isFirstPairWinner) {
+                firstPairWins++;
+            } else {
+                secondPairWins++;
+            }
         });
 
-        let matchWinTogether = 0;
-        matches.forEach(match => {
-            let bothInWinner = [firstPlayer, secPlayer]
-                .every(p => match.winner.includes(p));
-            if (bothInWinner) {
-                matchWinTogether++;
-            }
-        })
+        const totalMatches = matches.length;
+
         const result: IPairMatch = {
-            matchesWon: matchWinTogether.toString(),
-            matchesLost: (matches.length - matchWinTogether).toString(),
-            matchesPlayed: matches.length.toString(),
-            winRate: matches.length > 0 ? ((matchWinTogether / matches.length) * 100).toFixed(2) : "0.00"
+            firstTeamPairWins: firstPairWins,
+            secTeamPairWins: secondPairWins,
+            matchesPlayed : totalMatches,
+            winRateFirstTeamPair:
+                totalMatches > 0 ? ((firstPairWins / totalMatches) * 100).toFixed(2) : "0.00",
+            winRateSecTeamPair:
+                totalMatches > 0 ? ((secondPairWins / totalMatches) * 100).toFixed(2) : "0.00",
         };
+
         return result;
     }
 

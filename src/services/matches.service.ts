@@ -74,8 +74,8 @@ class MatchesService {
     /**
      * check win rate by team
      */
-    async getPairWinRate(firstPlayer: string, secPlayer: string): Promise<IPairMatch> {
-        return MatchesRepository.getPairWinRate(firstPlayer, secPlayer);
+    async getPairWinRate(firstPair: [string, string], secondPair: [string, string]): Promise<IPairMatch> {
+        return MatchesRepository.getPairWinRate(firstPair, secondPair);
     }
 }
 

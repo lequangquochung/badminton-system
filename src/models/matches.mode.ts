@@ -11,10 +11,11 @@ export interface IMatch extends Document {
 }
 
 export interface IPairMatch {
-    matchesWon: string;
-    matchesLost: string;
-    matchesPlayed: string;
-    winRate: string;
+    matchesPlayed: number;
+    firstTeamPairWins: number;
+    secTeamPairWins: number;
+    winRateFirstTeamPair: string; // %
+    winRateSecTeamPair: string; // %
 }
 
 const matchSchema: Schema = new Schema<IMatch>({
