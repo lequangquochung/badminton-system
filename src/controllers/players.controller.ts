@@ -27,7 +27,7 @@ class PlayerController {
             const {
                 search,
                 page = '1',
-                limit = '10',
+                limit = '999',
             } = req.query as {
                 search?: string;
                 page?: string;
