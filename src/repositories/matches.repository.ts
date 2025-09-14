@@ -36,7 +36,7 @@ class MatchesRepository {
         // Pipeline
         const pipeline: PipelineStage[] = [
             { $match: matchCase },
-            { $sort: { matchDay: -1 } },
+            { $sort: { createdAt: -1 } },
             {
                 $facet: {
                     data: [
