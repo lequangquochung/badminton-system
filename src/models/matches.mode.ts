@@ -8,6 +8,7 @@ export interface IMatch extends Document {
     secScore: number;
     winner: string[];
     matchDay: Date;
+    type: string;
 }
 
 export interface IPairMatch {
@@ -55,6 +56,11 @@ const matchSchema: Schema = new Schema<IMatch>({
         type: Date,
         default: Date.now,
         required: true,
+    },
+    type :{
+        type: String,
+        required: true,
+        trim: true,
     }
 }, {
     timestamps: true,

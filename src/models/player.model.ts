@@ -9,6 +9,7 @@ export interface IPlayer extends Document {
     matchesWon: number;
     matchesLost: number;
     partnerInfo?: IPartnerInfo[];
+    gender: string;
 }
 
 export interface IPartnerInfo extends Document {
@@ -30,8 +31,8 @@ const playerSchema = new Schema<IPlayer>({
     partnerInfo: [{
         name: { type: String, required: false, trim: true },
         winRate: { type: Number, required: false, min: 0, max: 100 }
-    }]
-
+    }],
+    gender: { type: String, required: true }
 }, {
     timestamps: true,
     collection: 'player',

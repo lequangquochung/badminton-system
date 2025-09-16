@@ -73,8 +73,9 @@ class MatchesController {
             const search = req.body?.search || "";
             const page = req.body?.page || 1;
             const limit = req.body.limit || 10;
+            const type = req.body?.type || "";
 
-            const result = await matchesService.getHistoryMatches(search, page, limit);
+            const result = await matchesService.getHistoryMatches(search, page, limit, type);
             sendSuccess(res, HttpStatusCode.OK, result);
         } catch (error) {
             next(error);
@@ -95,8 +96,6 @@ class MatchesController {
             next(error);
         }
     }
-
-
 }
 
 

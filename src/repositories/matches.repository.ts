@@ -11,7 +11,8 @@ class MatchesRepository {
     async getHistoryMatches(
         search: string,
         page: number,
-        limit: number
+        limit: number,
+        type: string
     ): Promise<{
         data: IMatch[];
         totalCount: number;
@@ -27,6 +28,10 @@ class MatchesRepository {
                 { thirdPlayer: { $regex: search, $options: "i" } },
                 { fourthPlayer: { $regex: search, $options: "i" } },
             ];
+        }
+
+        if(type) {
+            matchCase.type = type;
         }
 
         const pageNum = Number(page) || 1;

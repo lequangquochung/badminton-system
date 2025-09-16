@@ -30,10 +30,11 @@ class MatchesService {
     async getHistoryMatches(
         search: string,
         page: number,
-        limit: number
+        limit: number,
+        type: string
     ) {
         try {
-            const result = await MatchesRepository.getHistoryMatches(search, page, limit);
+            const result = await MatchesRepository.getHistoryMatches(search, page, limit, type);
             return result;
         } catch (error: any) {
             throw new Error("Error getHistoryMatches: " + error.message);
