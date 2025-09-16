@@ -105,8 +105,12 @@ class PlayersRepository {
         return 0;
     }
 
-
-
+    /**
+     * edit player info
+     */
+    async updatePlayerGender(id: string, gender: string): Promise<IPlayer | null> {
+        return await PlayerModel.findByIdAndUpdate(id, { $set: { gender } }, { new: true });
+    }
 
 }
 

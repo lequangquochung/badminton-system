@@ -16,11 +16,23 @@ class PlayerService {
     }
 
     /**
+     * updatePlayerGender
+     */
+    async updatePlayerGender(id: string, gender: string): Promise<IPlayer | null> {
+        try {
+            return await playersRepository.updatePlayerGender(id, gender);
+        } catch (error: any) {
+            throw new Error('Error: ' + error.message);
+        }
+    }
+
+    /**
      * get all players
      */
     async getAllPlayers(search: any | undefined,
         page: string,
-        limit: string): Promise<
+        limit: string,
+        gender: string): Promise<
             {
                 data: IPlayer[];
                 totalCount: number;
@@ -35,7 +47,9 @@ class PlayerService {
             //     matchCase.name = { $regex: search, $options: 'i' };
             // }
             const skip = (Number(page) - 1) * Number(limit);
-
+            if (gender){
+                matchCase.gender = gender;
+            }
             const pipeline: PipelineStage[] = [
                 { $match: matchCase },
                 {

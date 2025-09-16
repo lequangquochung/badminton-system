@@ -20,6 +20,20 @@ class PlayerController {
     }
 
     /**
+     * edit player
+     */
+    async updatePlayerGender(req: Request, res: Response, next: NextFunction) {
+        try {
+            if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+                return res.status(400).json({ message: 'Invalid User' });
+            }
+            const player = await playerService.updatePlayerGender(req.params.id, req.body.gender);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    /**
      * Get all players
      */
     async getAllPlayers(req: Request, res: Response, next: NextFunction) {
@@ -28,13 +42,13 @@ class PlayerController {
                 search,
                 page = '1',
                 limit = '999',
-            } = req.query as {
+            } = req.body as {
                 search?: string;
                 page?: string;
                 limit?: string;
             };
-
-            const result = await playerService.getAllPlayers(search, page, limit);
+            const gender = req.body.gender ?? "";
+            const result = await playerService.getAllPlayers(search, page, limit, gender);
             sendSuccess(res, HttpStatusCode.OK, result);
         } catch (error) {
             next(error);

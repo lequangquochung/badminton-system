@@ -7,13 +7,16 @@ const playersRoutes = express.Router();
 playersRoutes.post('/', playersController.addPlayer);
 
 // get all players
-playersRoutes.get('/', playersController.getAllPlayers);
+playersRoutes.post('/list', playersController.getAllPlayers);
 
 // get player by id
 playersRoutes.get('/:id', playersController.getPlayerById);
 
 // get history matches by player ID
 playersRoutes.get('/:id/history', playersController.getHistoryMatchesByPlayerId);
+
+// edit player
+playersRoutes.post('/:id', playersController.updatePlayerGender);
 
 
 
